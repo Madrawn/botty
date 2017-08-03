@@ -1,10 +1,7 @@
 package de.daniel.dengler.getRichBot;
 
-import java.util.Observable;
 
-import org.apache.commons.cli.CommandLine;
-
-public class FakeBalance implements Balance extends Observable{
+public class FakeBalance implements Balance {
 
 	
 	private double balance;
@@ -47,11 +44,11 @@ public class FakeBalance implements Balance extends Observable{
 	
 	public double getMaxSellBalance(){
 		
-		return 2*balance;
+		return Math.max(0, balance);
 	}
 	public double getMaxSellCoBalance(){
 		
-		return 2*coBalance;
+		return Math.max(0, coBalance);
 	}
 
 }

@@ -1,5 +1,7 @@
 package de.daniel.dengler.getRichBot;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.Arrays;
 import java.util.Observable;
 import java.util.Observer;
@@ -25,7 +27,9 @@ import eu.verdelhan.ta4j.Decimal;
 import eu.verdelhan.ta4j.Order.OrderType;
 import eu.verdelhan.ta4j.Rule;
 import eu.verdelhan.ta4j.Strategy;
+import eu.verdelhan.ta4j.Trade;
 import eu.verdelhan.ta4j.TradingRecord;
+import eu.verdelhan.ta4j.indicators.helpers.AverageTrueRangeIndicator;
 import eu.verdelhan.ta4j.indicators.oscillators.FisherIndicator;
 import eu.verdelhan.ta4j.indicators.simple.ClosePriceIndicator;
 import eu.verdelhan.ta4j.indicators.simple.MedianPriceIndicator;
@@ -91,7 +95,13 @@ public class SuperEasyCmdBot implements Observer {
 		Option debug = new Option("debug", "print debugging information");
 		Option dontask = new Option("dontask",
 				"don't ask for confirmation when placing orders");
+		Option reverseRule = new Option("reverse",
+				"Uses the strategy reversed for short trading");
+		Option useATR = new Option("ATR",
+				"uses average true range to stop trading when atr is smaller than 0.2% fee");
 
+		options.addOption(useATR);
+		options.addOption(reverseRule);
 		options.addOption(dontask);
 		options.addOption(numberOfPeriods);
 		options.addOption(periodLength);
@@ -237,6 +247,7 @@ public class SuperEasyCmdBot implements Observer {
 	}
 
 	private Strategy longStrat, shortStrat;
+	private boolean flipFlop;
 
 	public void update(Observable o, Object arg) {
 		Logger.debugLog(String.format("Update was called with %s", arg));
@@ -306,47 +317,63 @@ public class SuperEasyCmdBot implements Observer {
 
 		boolean longEnter, longExit, shortEnter = false, shortExit = false;
 
-		longEnter = longStrategy.shouldEnter(w.getTimeSeries().getEnd(), t);
-		longExit = longStrategy.shouldExit(w.getTimeSeries().getEnd(), t);
+		int end = w.getTimeSeries().getEnd();
+		longEnter = longStrategy.shouldEnter(end, t);
+		longExit = longStrategy.shouldExit(end, t);
 
-		Rule gain = StrategyBuilder.stopGain(new ClosePriceIndicator(w
-				.getTimeSeries()));
-		Rule loss = StrategyBuilder.stopLoss(new ClosePriceIndicator(w
-				.getTimeSeries()));
+		ClosePriceIndicator closePrice = new ClosePriceIndicator(
+				w.getTimeSeries());
+		Rule gain = StrategyBuilder.stopGain(closePrice);
+		Rule loss = StrategyBuilder.stopLoss(closePrice);
 
 		Rule wait = new WaitForRule(OrderType.BUY, 5);
 
 		FisherIndicator testFish = new FisherIndicator(
 				new MedianPriceIndicator(w.getTimeSeries()), 9);
 
-		Logger.debugLog(String.format("Fish: %s",
-				testFish.getValue(w.getTimeSeries().getEnd())));
+		Logger.debugLog(String.format("Fish: %s", testFish.getValue(end)));
 
 		Logger.debugLog(String.format(
 				"IsGainTrue: %s IsLossTrue: %s IsWaitTrue %s",
-				gain.isSatisfied(w.getTimeSeries().getEnd(), t),
-				loss.isSatisfied(w.getTimeSeries().getEnd(), t),
-				wait.isSatisfied(w.getTimeSeries().getEnd(), t)));
+				gain.isSatisfied(end, t), loss.isSatisfied(end, t),
+				wait.isSatisfied(end, t)));
+		boolean satisfied;
+		Trade currentTrade = t.getCurrentTrade();
+		if (currentTrade.isOpened()) {
+			Decimal entryPrice = currentTrade.getEntry().getPrice();
+			Decimal currentPrice = closePrice.getValue(end);
+			Decimal multipliedBy = entryPrice.multipliedBy(Decimal
+					.valueOf(1.0 - StrategyBuilder.feeTolerance));
+			satisfied = currentPrice.isLessThanOrEqual(multipliedBy);
+			Logger.debugLog(String
+					.format("Gain and or loss should fire at %s. Entry is %s current is %s",
+							multipliedBy, entryPrice, currentPrice));
+
+		}
 
 		if (shortStrategy != null) {
 			Logger.debugLog("Checking shorts");
-			shortEnter = shortStrategy.shouldEnter(w.getTimeSeries().getEnd(),
-					t);
-			shortExit = shortStrategy.shouldExit(w.getTimeSeries().getEnd(), t);
+			shortEnter = shortStrategy.shouldEnter(end, t);
+			shortExit = shortStrategy.shouldExit(end, t);
 
+		} else if (cmd.hasOption("reverse")) {
+			shortEnter = longExit;
+			shortExit = longEnter;
 		}
 
 		Logger.normalLog(String
 				.format("Tick: %s \nLongEnter: %s LongExit: %s ShortEnter: %s ShortExit: %s",
-						w.getTimeSeries().getLastTick(), longEnter, longExit,
-						shortEnter, shortExit));
+						w.getTimeSeries().getLastTick(),
+						Logger.colorBool(longEnter),
+						Logger.colorBool(longExit),
+						Logger.colorBool(shortEnter),
+						Logger.colorBool(shortExit)));
 		actuallyDoSomethingMaybe(w, longEnter, longExit, shortEnter, shortExit);
 	}
 
-	private void actuallyDoSomethingMaybe(Watcher w, boolean enter,
-			boolean exit, boolean shortEnter, boolean shortExit) {
+	private void actuallyDoSomethingMaybe(Watcher w, boolean longEnter,
+			boolean longExit, boolean shortEnter, boolean shortExit) {
 		boolean forReal = cmd.hasOption("r");
-
 		boolean newTrade = w.getTradingRecord().getCurrentTrade().isNew();
 		if (balance == null && !forReal) {
 			balance = new FakeBalance(50, 0.1);
@@ -355,35 +382,64 @@ public class SuperEasyCmdBot implements Observer {
 			w.setBalance(balance);
 		}
 		Logger.debugLog("IsNewTrade: " + newTrade);
-		double sellPrice = w.getCurrentBestBid();
-		double buyPrice = w.getCurrentBestAsk();
+		double sellPrice;
+		double buyPrice;
+		try {
+			sellPrice = w.getCurrentBestBid();
+			buyPrice = w.getCurrentBestAsk();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return;
+		}
+		boolean ATRSaysStop = false;
+		if (cmd.hasOption("ATR")) {
+			double avgPrice = (sellPrice + buyPrice) / 2;
+			double avgFee = avgPrice * 0.002;
+			AverageTrueRangeIndicator atrIndicator = new AverageTrueRangeIndicator(
+					w.getTimeSeries(), 14);
+			Decimal value = atrIndicator.getValue(w.getTimeSeries().getEnd());
+			ATRSaysStop = value.isLessThan(Decimal.valueOf(avgFee));
+			Logger.debugLog("ATR says Stop: " + ATRSaysStop);
+			Logger.debugLog("AvgFee: " + avgFee);
+			Logger.debugLog("ATR: " + value);
+		}
 		double coba = balance.getMaxSellCoBalance(), ba = balance
 				.getMaxSellBalance();
 		if (newTrade) {
-			if (shortEnter) {
+			if (shortEnter && !ATRSaysStop) {
 				w.getTradingRecord().enter(w.getTimeSeries().getEnd(),
 						Decimal.valueOf(sellPrice), Decimal.NaN);
-				balance.sellCoBa(sellPrice,coba);
-			} else if (enter) {
+				balance.sellCoBa(sellPrice, coba);
+				flipFlop = false;
+			} else if (longEnter && !ATRSaysStop) {
 				w.getTradingRecord().enter(w.getTimeSeries().getEnd(),
 						Decimal.valueOf(buyPrice), Decimal.NaN);
 				balance.buyCoBa(buyPrice, ba);
-
+				flipFlop = true;
 			}
 		} else {
-			if (shortExit) {
+
+			Logger.debugLog(String.format("justOnce = %s", flipFlop));
+
+			if (shortExit && !flipFlop) {
 				w.getTradingRecord().exit(w.getTimeSeries().getEnd(),
 						Decimal.valueOf(buyPrice), Decimal.NaN);
 				balance.buyCoBa(buyPrice, ba);
-				w.getTradingRecord().enter(w.getTimeSeries().getEnd(),
-						Decimal.valueOf(buyPrice), Decimal.NaN);
+				if (!ATRSaysStop) {
+					w.getTradingRecord().enter(w.getTimeSeries().getEnd(),
+							Decimal.valueOf(buyPrice), Decimal.NaN);
+				}
+				flipFlop = true;
 
-			} else if (exit) {
+			} else if (longExit && flipFlop) {
 				w.getTradingRecord().exit(w.getTimeSeries().getEnd(),
 						Decimal.valueOf(sellPrice), Decimal.NaN);
-				balance.sellCoBa(sellPrice,coba);
-				w.getTradingRecord().enter(w.getTimeSeries().getEnd(),
-						Decimal.valueOf(sellPrice), Decimal.NaN);
+				balance.sellCoBa(sellPrice, coba);
+				if (!ATRSaysStop) {
+					w.getTradingRecord().enter(w.getTimeSeries().getEnd(),
+							Decimal.valueOf(sellPrice), Decimal.NaN);
+				}
+				flipFlop = false;
 
 			}
 		}

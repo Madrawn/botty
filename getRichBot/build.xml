@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. --><project basedir="." default="build" name="getRichBot">
+    <property environment="env"/>
+    <property name="ECLIPSE_HOME" value="D:/Projekt FFFF/eclipse/"/>
+    <property name="junit.output.dir" value="junit"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="1.5"/>
+    <property name="source" value="1.5"/>
+    <path id="Maven Dependencies.libraryclasspath">
+        <pathelement location="../../.m2/repository/commons-cli/commons-cli/1.2/commons-cli-1.2.jar"/>
+        <pathelement location="../../.m2/repository/commons-io/commons-io/2.5/commons-io-2.5.jar"/>
+        <pathelement location="../../.m2/repository/org/apache/commons/commons-lang3/3.6/commons-lang3-3.6.jar"/>
+        <pathelement location="../../.m2/repository/javax/websocket/javax.websocket-api/1.1/javax.websocket-api-1.1.jar"/>
+        <pathelement location="../../.m2/repository/com/neovisionaries/nv-websocket-client/1.13/nv-websocket-client-1.13.jar"/>
+        <pathelement location="../../.m2/repository/org/java-websocket/Java-WebSocket/1.3.4/Java-WebSocket-1.3.4.jar"/>
+        <pathelement location="../../.m2/repository/junit/junit/3.8.1/junit-3.8.1.jar"/>
+        <pathelement location="../../.m2/repository/eu/verdelhan/ta4j/0.8/ta4j-0.8.jar"/>
+        <pathelement location="../../.m2/repository/joda-time/joda-time/2.3/joda-time-2.3.jar"/>
+        <pathelement location="../../.m2/repository/org/slf4j/slf4j-api/1.7.7/slf4j-api-1.7.7.jar"/>
+        <pathelement location="../../.m2/repository/ws/wamp/jawampa/jawampa-netty/0.5.0/jawampa-netty-0.5.0.jar"/>
+        <pathelement location="../../.m2/repository/ws/wamp/jawampa/jawampa-core/0.5.0/jawampa-core-0.5.0.jar"/>
+        <pathelement location="../../.m2/repository/io/netty/netty-codec-http/4.1.11.Final/netty-codec-http-4.1.11.Final.jar"/>
+        <pathelement location="../../.m2/repository/io/netty/netty-codec/4.1.11.Final/netty-codec-4.1.11.Final.jar"/>
+        <pathelement location="../../.m2/repository/io/netty/netty-handler/4.1.11.Final/netty-handler-4.1.11.Final.jar"/>
+        <pathelement location="../../.m2/repository/io/netty/netty-buffer/4.1.11.Final/netty-buffer-4.1.11.Final.jar"/>
+        <pathelement location="../../.m2/repository/io/netty/netty-common/4.1.11.Final/netty-common-4.1.11.Final.jar"/>
+        <pathelement location="../../.m2/repository/io/netty/netty-transport/4.1.11.Final/netty-transport-4.1.11.Final.jar"/>
+        <pathelement location="../../.m2/repository/io/netty/netty-resolver/4.1.11.Final/netty-resolver-4.1.11.Final.jar"/>
+        <pathelement location="../../.m2/repository/io/reactivex/rxjava/1.0.8/rxjava-1.0.8.jar"/>
+        <pathelement location="../../.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.4.4/jackson-databind-2.4.4.jar"/>
+        <pathelement location="../../.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.4.0/jackson-annotations-2.4.0.jar"/>
+        <pathelement location="../../.m2/repository/com/fasterxml/jackson/core/jackson-core/2.4.4/jackson-core-2.4.4.jar"/>
+        <pathelement location="../../.m2/repository/org/msgpack/jackson-dataformat-msgpack/0.7.0-p7/jackson-dataformat-msgpack-0.7.0-p7.jar"/>
+        <pathelement location="../../.m2/repository/org/msgpack/msgpack-core/0.7.0-p7/msgpack-core-0.7.0-p7.jar"/>
+        <pathelement location="../../.m2/repository/org/slf4j/slf4j-jdk14/1.8.0-alpha2/slf4j-jdk14-1.8.0-alpha2.jar"/>
+        <pathelement location="../../.m2/repository/com/google/code/gson/gson/2.8.1/gson-2.8.1.jar"/>
+        <pathelement location="../../.m2/repository/jfree/jfreechart/1.0.13/jfreechart-1.0.13.jar"/>
+        <pathelement location="../../.m2/repository/jfree/jcommon/1.0.16/jcommon-1.0.16.jar"/>
+    </path>
+    <path id="JUnit 4.libraryclasspath">
+        <pathelement location="${ECLIPSE_HOME}plugins/org.junit_4.11.0.v201303080030/junit.jar"/>
+        <pathelement location="${ECLIPSE_HOME}plugins/org.hamcrest.core_1.3.0.v201303031735.jar"/>
+    </path>
+    <path id="getRichBot.classpath">
+        <pathelement location="target/classes"/>
+        <pathelement location="target/test-classes"/>
+        <path refid="Maven Dependencies.libraryclasspath"/>
+        <path refid="JUnit 4.libraryclasspath"/>
+    </path>
+    <path id="run.AddWatchDialogOne.classpath">
+        <path refid="getRichBot.classpath"/>
+        <path refid="Maven Dependencies.libraryclasspath"/>
+    </path>
+    <path id="run.App (1).classpath">
+        <path refid="getRichBot.classpath"/>
+        <path refid="Maven Dependencies.libraryclasspath"/>
+    </path>
+    <path id="run.BitfinexExchangeWrapperTest.classpath">
+        <path refid="getRichBot.classpath"/>
+        <path refid="Maven Dependencies.libraryclasspath"/>
+    </path>
+    <path id="run.BitfinexExchangeWrapperTest.testMostRecentCandle.classpath">
+        <path refid="getRichBot.classpath"/>
+        <path refid="Maven Dependencies.libraryclasspath"/>
+    </path>
+    <path id="run.BitfinexWrapperConnectorTest.candlesTest.classpath">
+        <path refid="getRichBot.classpath"/>
+        <path refid="Maven Dependencies.libraryclasspath"/>
+    </path>
+    <path id="run.BitfinexWrapperConnectorTest.classpath">
+        <path refid="getRichBot.classpath"/>
+        <path refid="Maven Dependencies.libraryclasspath"/>
+    </path>
+    <path id="run.BitfinexWrapperSettingsTest.classpath">
+        <path refid="getRichBot.classpath"/>
+        <path refid="Maven Dependencies.libraryclasspath"/>
+    </path>
+    <path id="run.GotChartFrame.classpath">
+        <path refid="getRichBot.classpath"/>
+        <path refid="Maven Dependencies.libraryclasspath"/>
+    </path>
+    <path id="run.HelperTest (1).classpath">
+        <path refid="getRichBot.classpath"/>
+        <path refid="Maven Dependencies.libraryclasspath"/>
+    </path>
+    <path id="run.LiveRobot.classpath">
+        <path refid="getRichBot.classpath"/>
+        <path refid="Maven Dependencies.libraryclasspath"/>
+    </path>
+    <path id="run.MainModelTest.classpath">
+        <path refid="getRichBot.classpath"/>
+        <path refid="Maven Dependencies.libraryclasspath"/>
+    </path>
+    <path id="run.MainWindow.classpath">
+        <path refid="getRichBot.classpath"/>
+        <path refid="Maven Dependencies.libraryclasspath"/>
+    </path>
+    <path id="run.NativeWSClient.classpath">
+        <path refid="getRichBot.classpath"/>
+        <path refid="Maven Dependencies.libraryclasspath"/>
+    </path>
+    <path id="run.NewMainUI.classpath">
+        <path refid="getRichBot.classpath"/>
+        <path refid="Maven Dependencies.libraryclasspath"/>
+    </path>
+    <path id="run.PoloWrapperTest.classpath">
+        <path refid="getRichBot.classpath"/>
+        <path refid="Maven Dependencies.libraryclasspath"/>
+    </path>
+    <path id="run.RulesTest.classpath">
+        <path refid="getRichBot.classpath"/>
+        <path refid="Maven Dependencies.libraryclasspath"/>
+    </path>
+    <path id="run.SuperEasyCmdBot.classpath">
+        <path refid="getRichBot.classpath"/>
+        <path refid="Maven Dependencies.libraryclasspath"/>
+    </path>
+    <path id="run.Switchclient.classpath">
+        <path refid="getRichBot.classpath"/>
+        <path refid="Maven Dependencies.libraryclasspath"/>
+    </path>
+    <path id="run.SwitchclientTest.classpath">
+        <path refid="getRichBot.classpath"/>
+        <path refid="Maven Dependencies.libraryclasspath"/>
+    </path>
+    <path id="run.WatcherTest.classpath">
+        <path refid="getRichBot.classpath"/>
+        <path refid="Maven Dependencies.libraryclasspath"/>
+    </path>
+    <path id="run.WSClientTest.classpath">
+        <path refid="getRichBot.classpath"/>
+        <path refid="Maven Dependencies.libraryclasspath"/>
+    </path>
+    <target name="init">
+        <mkdir dir="target/classes"/>
+        <mkdir dir="target/test-classes"/>
+        <copy includeemptydirs="false" todir="target/classes">
+            <fileset dir="src/main/java">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+        <copy includeemptydirs="false" todir="target/test-classes">
+            <fileset dir="src/test/java">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="clean">
+        <delete dir="target/classes"/>
+        <delete dir="target/test-classes"/>
+    </target>
+    <target depends="clean" name="cleanall"/>
+    <target depends="build-subprojects,build-project" name="build"/>
+    <target name="build-subprojects"/>
+    <target depends="init" name="build-project">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="target/classes" includeantruntime="false" source="${source}" target="${target}">
+            <src path="src/main/java"/>
+            <classpath refid="getRichBot.classpath"/>
+        </javac>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="target/test-classes" includeantruntime="false" source="${source}" target="${target}">
+            <src path="src/test/java"/>
+            <classpath refid="getRichBot.classpath"/>
+        </javac>
+    </target>
+    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
+    <target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
+        <copy todir="${ant.library.dir}">
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </copy>
+        <unzip dest="${ant.library.dir}">
+            <patternset includes="jdtCompilerAdapter.jar"/>
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </unzip>
+    </target>
+    <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
+        <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
+        <antcall target="build"/>
+    </target>
+    <target name="AddWatchDialogOne">
+        <java classname="de.daniel.dengler.getRichBot.UI.AddWatchDialogOne" failonerror="true" fork="yes">
+            <classpath refid="run.AddWatchDialogOne.classpath"/>
+        </java>
+    </target>
+    <target name="App (1)">
+        <java classname="de.daniel.dengler.getRichBot.App" failonerror="true" fork="yes">
+            <classpath refid="run.App (1).classpath"/>
+        </java>
+    </target>
+    <target name="BitfinexExchangeWrapperTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="de.daniel.dengler.getRichBot.exchangewrappers.bitfinex.BitfinexExchangeWrapperTest" todir="${junit.output.dir}"/>
+            <classpath refid="run.BitfinexExchangeWrapperTest.classpath"/>
+        </junit>
+    </target>
+    <target name="BitfinexExchangeWrapperTest.testMostRecentCandle">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="de.daniel.dengler.getRichBot.exchangewrappers.bitfinex.BitfinexExchangeWrapperTest" todir="${junit.output.dir}"/>
+            <classpath refid="run.BitfinexExchangeWrapperTest.testMostRecentCandle.classpath"/>
+        </junit>
+    </target>
+    <target name="BitfinexWrapperConnectorTest.candlesTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="de.daniel.dengler.getRichBot.exchangewrappers.bitfinex.BitfinexWrapperConnectorTest" todir="${junit.output.dir}"/>
+            <classpath refid="run.BitfinexWrapperConnectorTest.candlesTest.classpath"/>
+        </junit>
+    </target>
+    <target name="BitfinexWrapperConnectorTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="de.daniel.dengler.getRichBot.exchangewrappers.bitfinex.BitfinexWrapperConnectorTest" todir="${junit.output.dir}"/>
+            <classpath refid="run.BitfinexWrapperConnectorTest.classpath"/>
+        </junit>
+    </target>
+    <target name="BitfinexWrapperSettingsTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="de.daniel.dengler.getRichBot.exchangewrappers.bitfinex.BitfinexWrapperSettingsTest" todir="${junit.output.dir}"/>
+            <classpath refid="run.BitfinexWrapperSettingsTest.classpath"/>
+        </junit>
+    </target>
+    <target name="GotChartFrame">
+        <java classname="de.daniel.dengler.getRichBot.GotChartFrame" failonerror="true" fork="yes">
+            <classpath refid="run.GotChartFrame.classpath"/>
+        </java>
+    </target>
+    <target name="HelperTest (1)">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="de.daniel.dengler.getRichBot.HelperTest" todir="${junit.output.dir}"/>
+            <classpath refid="run.HelperTest (1).classpath"/>
+        </junit>
+    </target>
+    <target name="LiveRobot">
+        <java classname="de.daniel.dengler.getRichBot.LiveRobot" failonerror="true" fork="yes">
+            <classpath refid="run.LiveRobot.classpath"/>
+        </java>
+    </target>
+    <target name="MainModelTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="de.daniel.dengler.getRichBot.MainModelTest" todir="${junit.output.dir}"/>
+            <classpath refid="run.MainModelTest.classpath"/>
+        </junit>
+    </target>
+    <target name="MainWindow">
+        <java classname="de.daniel.dengler.getRichBot.MainWindow" failonerror="true" fork="yes">
+            <classpath refid="run.MainWindow.classpath"/>
+        </java>
+    </target>
+    <target name="NativeWSClient">
+        <java classname="de.daniel.dengler.getRichBot.NativeWSClient" failonerror="true" fork="yes">
+            <classpath refid="run.NativeWSClient.classpath"/>
+        </java>
+    </target>
+    <target name="NewMainUI">
+        <java classname="de.daniel.dengler.getRichBot.UI.NewMainUI" failonerror="true" fork="yes">
+            <arg line="-help"/>
+            <classpath refid="run.NewMainUI.classpath"/>
+        </java>
+    </target>
+    <target name="PoloWrapperTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="de.daniel.dengler.getRichBot.PoloWrapperTest" todir="${junit.output.dir}"/>
+            <classpath refid="run.PoloWrapperTest.classpath"/>
+        </junit>
+    </target>
+    <target name="RulesTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="de.daniel.dengler.getRichBot.RulesTest" todir="${junit.output.dir}"/>
+            <classpath refid="run.RulesTest.classpath"/>
+        </junit>
+    </target>
+    <target name="SuperEasyCmdBot">
+        <java classname="de.daniel.dengler.getRichBot.SuperEasyCmdBot" failonerror="true" fork="yes">
+            <arg line="-debug -s LONGSHORTFISHER 9 1 -l MIN_5"/>
+            <classpath refid="run.SuperEasyCmdBot.classpath"/>
+        </java>
+    </target>
+    <target name="Switchclient">
+        <java classname="de.daniel.dengler.getRichBot.Switchclient" failonerror="true" fork="yes">
+            <classpath refid="run.Switchclient.classpath"/>
+        </java>
+    </target>
+    <target name="SwitchclientTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="de.daniel.dengler.getRichBot.SwitchclientTest" todir="${junit.output.dir}"/>
+            <classpath refid="run.SwitchclientTest.classpath"/>
+        </junit>
+    </target>
+    <target name="WatcherTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="de.daniel.dengler.getRichBot.WatcherTest" todir="${junit.output.dir}"/>
+            <classpath refid="run.WatcherTest.classpath"/>
+        </junit>
+    </target>
+    <target name="WSClientTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="de.daniel.dengler.getRichBot.WSClientTest" todir="${junit.output.dir}"/>
+            <classpath refid="run.WSClientTest.classpath"/>
+        </junit>
+    </target>
+    <target name="junitreport">
+        <junitreport todir="${junit.output.dir}">
+            <fileset dir="${junit.output.dir}">
+                <include name="TEST-*.xml"/>
+            </fileset>
+            <report format="frames" todir="${junit.output.dir}"/>
+        </junitreport>
+    </target>
+</project>

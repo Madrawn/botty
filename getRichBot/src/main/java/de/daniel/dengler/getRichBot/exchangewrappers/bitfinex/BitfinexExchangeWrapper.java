@@ -1,5 +1,8 @@
 package de.daniel.dengler.getRichBot.exchangewrappers.bitfinex;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -104,11 +107,11 @@ public class BitfinexExchangeWrapper extends ExchangeWrapper implements
 	}
 	
 	
-	public double getCurrentBestAsk() {
+	public double getCurrentBestAsk() throws MalformedURLException, IOException {
 		BitfinexOrderBook orderBook = myConnector.getOrderBook(settings.getPairAsString());
 		return orderBook.asks[0].price;
 	}
-	public double getCurrentBestBid() {
+	public double getCurrentBestBid() throws MalformedURLException, IOException {
 		BitfinexOrderBook orderBook = myConnector.getOrderBook(settings.getPairAsString());
 		return orderBook.bids[0].price;
 	}

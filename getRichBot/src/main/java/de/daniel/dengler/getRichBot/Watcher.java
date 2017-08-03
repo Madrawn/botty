@@ -1,5 +1,7 @@
 package de.daniel.dengler.getRichBot;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.Date;
 import java.util.Observable;
 import java.util.Observer;
@@ -217,12 +219,12 @@ public class Watcher extends Observable implements Runnable {
 
 	}
 
-	public double getCurrentBestAsk() {
+	public double getCurrentBestAsk() throws MalformedURLException, IOException {
 		// TODO Auto-generated method stub
 		return myWrapper.getCurrentBestAsk();
 	}
 
-	public double getCurrentBestBid() {
+	public double getCurrentBestBid() throws MalformedURLException, IOException {
 		// TODO Auto-generated method stub
 		return myWrapper.getCurrentBestBid();
 	}

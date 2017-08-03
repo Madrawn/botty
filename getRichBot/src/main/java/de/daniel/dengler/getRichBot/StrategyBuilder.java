@@ -9,6 +9,7 @@ import de.daniel.dengler.getRichBot.customindicators.DelayIndicator;
 import de.daniel.dengler.getRichBot.enums.StrategyType;
 import eu.verdelhan.ta4j.AnalysisCriterion;
 import eu.verdelhan.ta4j.Decimal;
+import eu.verdelhan.ta4j.Indicator;
 import eu.verdelhan.ta4j.Order.OrderType;
 import eu.verdelhan.ta4j.Rule;
 import eu.verdelhan.ta4j.Strategy;
@@ -54,13 +55,60 @@ public class StrategyBuilder {
 			newStrat = StrategyBuilder.findBestFromMap(series,
 					StrategyBuilder.buildLongFishStrategiesMap(series));
 			break;
-
+		case MACD_HIST:
+			newStrat = StrategyBuilder.buildMACDHisto(series,
+					Integer.parseInt(args[0]), Integer.parseInt(args[1]),
+					Integer.parseInt(args[2]));
+			break;
 		default:
 			break;
 		}
 
 		return newStrat;
 
+	}
+
+	private static Strategy buildMACDHisto(final TimeSeries series,
+			int shortEma, int longEma, int signal) {
+
+		ClosePriceIndicator closePrice = new ClosePriceIndicator(series);
+
+		final MACDIndicator macdIndicator = new MACDIndicator(closePrice,
+				shortEma, longEma);
+		final EMAIndicator macdSignalIndicator = new EMAIndicator(
+				macdIndicator, signal);
+		Indicator<Decimal> macdHistogramIndicator = new Indicator<Decimal>() {
+
+			public Decimal getValue(int index) {
+				Logger.debugLog(index+"");
+				Logger.debugLog("MACDIndicator: "
+						+ macdIndicator.getValue(index));
+				Logger.debugLog("MACDSignalIndicator: "
+						+ macdSignalIndicator.getValue(index));
+				Logger.debugLog("MACD - Signal: "
+						+ macdIndicator.getValue(index).minus(
+								macdSignalIndicator.getValue(index)));
+
+				return macdIndicator.getValue(index).minus(
+						macdSignalIndicator.getValue(index));
+			}
+
+			public TimeSeries getTimeSeries() {
+				return series;
+			}
+		};
+		DelayIndicator delayIndicator = new DelayIndicator(
+				macdHistogramIndicator);
+		Rule overRule = new CrossedUpIndicatorRule(macdHistogramIndicator,
+				delayIndicator);
+		Rule underRule = new CrossedUpIndicatorRule(delayIndicator,
+				macdHistogramIndicator);
+
+		Rule entryRule = overRule;
+		Rule exitRule = underRule;
+		Strategy result = new Strategy(entryRule, exitRule);
+
+		return result;
 	}
 
 	public static Strategy[] longShortFisher(TimeSeries series, int i, int j) {
@@ -205,8 +253,6 @@ public class StrategyBuilder {
 
 		FisherIndicator shortFish;
 		DelayIndicator delayFish;
-		Rule minGain = stopGain(closePrice);
-		Rule minDown = stopLoss(closePrice);
 
 		shortFish = new FisherIndicator(medianPrice, i);
 		delayFish = new DelayIndicator(shortFish, j);
@@ -216,9 +262,9 @@ public class StrategyBuilder {
 		Rule exitRule = new CrossedUpIndicatorRule(delayFish, shortFish);
 
 		if (isLong) {
-			exitRule = exitRule.and(minGain);
+			exitRule = exitRule;
 		} else {
-			Rule temp = entryRule.and(minDown);
+			Rule temp = entryRule;
 			entryRule = exitRule;
 			exitRule = temp;
 		}
@@ -331,8 +377,8 @@ public class StrategyBuilder {
 		return strategies;
 	}
 
-	
 	public static double feeTolerance = 0.000;
+
 	/**
 	 * @param closePrice
 	 * @return

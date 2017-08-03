@@ -86,18 +86,19 @@ public class BitfinexWrapperConnector implements IExchangeConnector {
 		jo.addProperty("ocoorder", ocoorder);
 		jo.addProperty("buy_price_oco", buy_price_oco);
 		jo.addProperty("sell_price_oco", sell_price_oco);
-		
+
 		String payload = jo.toString();
-		
+
 		try {
 			HttpsURLConnection c = (HttpsURLConnection) new URL(query)
 					.openConnection();
 
 			String sResult = sendAuthWithPayload(payload, c, key);
 			Logger.debugLog(sResult);
-			JsonObject jResult = new JsonParser().parse(sResult).getAsJsonObject();
+			JsonObject jResult = new JsonParser().parse(sResult)
+					.getAsJsonObject();
 			return jResult;
-			
+
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -292,7 +293,7 @@ public class BitfinexWrapperConnector implements IExchangeConnector {
 
 	}
 
-	public BitfinexOrderBook getOrderBook(String pairAsString) {
+	public BitfinexOrderBook getOrderBook(String pairAsString) throws MalformedURLException, IOException {
 		if (pairAsString.length() > 6) {
 			Logger.normalLog(pairAsString + " needs to be trimmed");
 			pairAsString = pairAsString.substring(1, pairAsString.length());
@@ -301,20 +302,12 @@ public class BitfinexWrapperConnector implements IExchangeConnector {
 
 		String query = restURIv1.toString() + "book/" + pairAsString;
 		InputStream c;
-		try {
-			c = new URL(query).openConnection().getInputStream();
-			BufferedReader b = new BufferedReader(new InputStreamReader(c));
-			Logger.verboseLog(query);
-			String sResult = b.readLine();
-			Logger.verboseLog(sResult);
-			result = new Gson().fromJson(sResult, BitfinexOrderBook.class);
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		c = new URL(query).openConnection().getInputStream();
+		BufferedReader b = new BufferedReader(new InputStreamReader(c));
+		Logger.verboseLog(query);
+		String sResult = b.readLine();
+		Logger.verboseLog(sResult);
+		result = new Gson().fromJson(sResult, BitfinexOrderBook.class);
 
 		return result;
 

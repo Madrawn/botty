@@ -1,5 +1,8 @@
 package de.daniel.dengler.getRichBot.exchangewrappers;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+
 import de.daniel.dengler.getRichBot.ChartDataPoint;
 
 public interface IExchangeWrapper {
@@ -15,6 +18,6 @@ public interface IExchangeWrapper {
 	IExchangeWrapperSettings getSettings();
 	double getDailyLow();
 	double getDailyHigh();
-	double getCurrentBestAsk();
-	double getCurrentBestBid();
+	double getCurrentBestAsk() throws MalformedURLException, IOException;
+	double getCurrentBestBid() throws MalformedURLException, IOException;
 }

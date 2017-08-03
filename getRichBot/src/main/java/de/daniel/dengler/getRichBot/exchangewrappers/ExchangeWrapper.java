@@ -1,6 +1,7 @@
 package de.daniel.dengler.getRichBot.exchangewrappers;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 
 import de.daniel.dengler.getRichBot.ChartDataPoint;
 import eu.verdelhan.ta4j.TimeSeries;
@@ -93,12 +94,12 @@ public class ExchangeWrapper implements Runnable, IExchangeWrapper {
 		return 0;
 	}
 
-	public double getCurrentBestAsk() {
+	public double getCurrentBestAsk() throws MalformedURLException, IOException {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
-	public double getCurrentBestBid() {
+	public double getCurrentBestBid() throws MalformedURLException, IOException {
 		// TODO Auto-generated method stub
 		return 0;
 	}

@@ -4,8 +4,10 @@ import de.daniel.dengler.getRichBot.Balance;
 import de.daniel.dengler.getRichBot.Watcher;
 
 public class BitfinexBalance implements Balance{
+	private Watcher w;
 	public BitfinexBalance(Watcher w) {
-		// TODO Auto-generated constructor stub
+		this.w = w;
+
 	}
 	String type;
 	String currency;
