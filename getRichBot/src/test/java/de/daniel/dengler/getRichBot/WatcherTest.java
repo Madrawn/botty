@@ -28,7 +28,7 @@ public class WatcherTest {
 	 */
 	@Test
 	public void watcherGetCandle() {
-		Watcher w = new Watcher(new LeftListItem(),
+		Watcher w = new Watcher(
 				new TestWrapper());
 
 		Candle c = w.getLatestCandle();
@@ -50,7 +50,7 @@ public class WatcherTest {
 	 */
 	@Test
 	public void watcherGetChart() {
-		Watcher w = new Watcher(new LeftListItem(),
+		Watcher w = new Watcher(
 				new TestWrapper());
 		TimeSeries t = w.chartData.currentChart;
 		assertNotNull(t);
@@ -65,7 +65,7 @@ public class WatcherTest {
 	 */
 	@Test
 	public void watcherUpdateTest(){
-		Watcher w = new Watcher(new LeftListItem(),
+		Watcher w = new Watcher(
 				new TestWrapper());
 		Tick firstTick = w.chartData.getLatestTick();
 		Tick secondTick = w.chartData.getLatestTick();

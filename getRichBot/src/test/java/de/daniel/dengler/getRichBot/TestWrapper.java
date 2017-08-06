@@ -129,7 +129,7 @@ public class TestWrapper implements IExchangeWrapper {
 	}
 
 	@Override
-	public long getBalance(String currency) {
+	public double getBalance(String currency) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
