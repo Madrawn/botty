@@ -21,11 +21,11 @@ public class GraphPotter extends JPanel {
 	private TimeSeries serie;
 	private int myWidth;
 	private int myHeight;
-	private Indicator<Decimal>[] indies;
+	private IndicatorPainter[] indies;
 
 	
 	
-	public GraphPotter(TimeSeries serie,int width, int height, Indicator<Decimal>... indies){
+	public GraphPotter(TimeSeries serie,int width, int height, IndicatorPainter... indies){
 	this.serie = serie;
 	this.myWidth = width;
 	this.myHeight = height;
@@ -47,7 +47,6 @@ public class GraphPotter extends JPanel {
 				Color.YELLOW
 		};
 		//Draw
-		serie.
 		for (int i = 0; i < indies.length; i++) {
 			Indicator<Decimal> ind = indies[i];
 			g.setColor(colorRotation[i % colorRotation.length-1]);
